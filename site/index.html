@@ -288,6 +288,9 @@
   @supports not (color: color-mix(in srgb, red, blue)) {
     #экран-1 { background: linear-gradient(115deg, var(--цвет-тёмный-фон) 0%, var(--цвет-тёмный-фон-3) 36%, var(--цвет-тёмный-фон-2) 100%) !important; }
   }
+  @media (min-width: 521px) and (max-width: 899px) and (min-height: 700px) and (max-height: 980px) {
+    #экран-1 .первый-экран__картинка { width: min(70vw, 480px, calc((100svh - 23rem) * 820 / 1062)) !important; }
+  }
   /* На невысоком телефоне кнопка обложки должна быть видна сразу. */
   @media (min-width: 900px) and (min-height: 600px) and (max-height: 800px) {
     #экран-1 { padding-bottom: 1rem; }
