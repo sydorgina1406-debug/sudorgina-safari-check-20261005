@@ -256,7 +256,9 @@ def step_interactions(driver, frame, entry, opened_snapshot):
             summary.click()
             WebDriverWait(driver, 4).until(lambda d: not step.get_property("open"))
             check(view, f"Step {index + 1}: real click closes body",
-                  not body.is_displayed(), {"open": step.get_property("open"), "rect": body.rect})
+                  not body.is_displayed(), {"open": step.get_property("open"),
+                  "rect": driver.execute_script("const r=arguments[0].getBoundingClientRect(); "
+                                                 "return {width:r.width,height:r.height}", body)})
         attempt(view, f"Step {index + 1} interaction", toggle)
 
 
