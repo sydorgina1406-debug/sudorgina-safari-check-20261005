@@ -314,6 +314,10 @@
     #экран-1 h1 { font-size: 1.75rem; }
     #экран-1 .лид { font-size: 1rem; line-height: 1.5; }
   }
+  /* По просьбе Юлии: пульсация нижней кнопки остаётся, бегущий блик убран. */
+  @media (max-width: 600px) {
+    .липкая-кнопка .кнопка--главная::after { content: none; animation: none; }
+  }
   </style>
   <div class="блок__внутри">
     <div class="первый-экран__текст">

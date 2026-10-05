@@ -372,6 +372,26 @@ def view_checks(driver, origin, mode, width, height, index):
         warning(view, "Font loading requires review", entry["fonts"])
     attempt(view, "Hero screenshot", lambda: screenshot(driver, frame, entry, "hero"))
     attempt(view, "Fresh horizontal overflow", lambda: overflow(driver, view, "fresh load"))
+    effects = driver.execute_script("""
+        const sticky = document.querySelector('.липкая-кнопка .кнопка--главная');
+        return {
+          mobile: matchMedia('(max-width: 600px)').matches,
+          pulse: getComputedStyle(sticky).animationName,
+          shimmer: getComputedStyle(sticky, '::after').animationName,
+          shimmerContent: getComputedStyle(sticky, '::after').content,
+          screens: Array.from(document.querySelectorAll('section .кнопка--главная'))
+            .filter(e => !e.closest('dialog')).map(e => ({
+              pulse: getComputedStyle(e).animationName,
+              shimmer: getComputedStyle(e, '::after').animationName}))
+        };
+    """)
+    check(view, "Sticky CTA keeps pulse", effects["pulse"] == "зов-кнопки", effects)
+    if effects["mobile"]:
+        check(view, "Sticky CTA has no shimmer",
+              effects["shimmer"] == "none" and effects["shimmerContent"] == "none", effects)
+    check(view, "Screen CTA effects preserved", len(effects["screens"]) == 4 and all(
+        e["pulse"] == "зов-кнопки" and e["shimmer"] == "блик-кнопки"
+        for e in effects["screens"]), effects)
     if mode != "landscape-layout":
         attempt(view, "Fresh closed steps", lambda: fresh_steps(driver, view))
         attempt(view, "Hero CTA position", lambda: hero_check(driver, view))
